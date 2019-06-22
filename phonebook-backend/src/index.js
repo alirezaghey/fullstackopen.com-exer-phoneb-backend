@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 
-const phoneBook =
+let phoneBook =
 [
       {
         "name": "Ada Lovelace",
@@ -55,6 +55,13 @@ app.get("/api/persons/:id", (req, res) => {
     res.json(person)
   else
     res.status(404).end();
+})
+
+app.delete("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  phoneBook = phoneBook.filter(person => person.id !== id)
+
+  res.status(204).end();
 })
 
 const PORT = 3001;
