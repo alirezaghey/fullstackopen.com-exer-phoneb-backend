@@ -41,7 +41,12 @@ const phoneBook =
       }
     ];
 
-app.get("/api/persons", (req, res) => res.json(phoneBook))
+app.get("/api/persons", (req, res) => res.json(phoneBook));
+
+app.get("/api/info", (req, res) => {
+    const resText = `Phonebook has info for ${phoneBook.length} people!<br/>${Date(Date.now).toString()}`;
+    res.send(resText);
+});
 
 const PORT = 3001;
 app.listen(PORT, () => `Server listening on port ${PORT}`);
