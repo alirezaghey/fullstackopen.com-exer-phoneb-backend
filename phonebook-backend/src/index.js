@@ -69,8 +69,15 @@ app.delete("/api/persons/:id", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
   const person = req.body;
+
+  if (person.name === "")
+    return res.status(400).json({error: "name missing!"});
+  if (person.number === "")
+    return res.status(400).json({error: "number missing!"});
+  if (phoneBook.some(el => el.name.toLocaleLowerCase() === person.name.toLocaleLowerCase()))
+    return res.status(400).json({error: "name already exists!"});
+  
   person.id = Math.floor(Math.random() * 10000);
-  console.log(person);
   phoneBook = phoneBook.concat(person);
   res.json(person);
 })
