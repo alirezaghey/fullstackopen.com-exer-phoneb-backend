@@ -2,12 +2,15 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const cors = require('cors');
 
 app.use(bodyParser.json());
 
 morgan.token('body', (req, res) => JSON.stringify(req.body));
 
-app.use(morgan(':method :url :status - :response-time ms :body'))
+app.use(morgan(':method :url :status - :response-time ms :body'));
+
+app.use(cors());
 
 // app.use(morgan('tiny'));
 
@@ -89,5 +92,5 @@ app.post("/api/persons", (req, res) => {
   res.json(person);
 })
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => `Server listening on port ${PORT}`);
