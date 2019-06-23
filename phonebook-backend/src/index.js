@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
 
 
 let phoneBook =
@@ -62,6 +65,14 @@ app.delete("/api/persons/:id", (req, res) => {
   phoneBook = phoneBook.filter(person => person.id !== id)
 
   res.status(204).end();
+})
+
+app.post("/api/persons", (req, res) => {
+  const person = req.body;
+  person.id = Math.floor(Math.random() * 10000);
+  console.log(person);
+  phoneBook = phoneBook.concat(person);
+  res.json(person);
 })
 
 const PORT = 3001;
