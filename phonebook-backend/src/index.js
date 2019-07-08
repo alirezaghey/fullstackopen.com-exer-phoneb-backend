@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 
+const personDB = require('./personDB');
+require('dotenv').config();
+
 app.use(bodyParser.json());
 
 morgan.token('body', (req, res) => JSON.stringify(req.body));
@@ -55,21 +58,33 @@ let phoneBook =
       }
     ];
 
-app.get("/api/persons", (req, res) => res.json(phoneBook));
+const url = process.env.MONGODB_URI;
+
+app.get("/api/persons", (req, res) => {
+  personDB.getAllPersons(url).then(persons => {
+    res.json(persons.map(per => {return {id: per._id, name: per.name, number: per.number}}));
+  });
+});
 
 app.get("/api/info", (req, res) => {
-    const resText = `Phonebook has info for ${phoneBook.length} people!<br/>${Date(Date.now).toString()}`;
-    res.send(resText);
+    // const resText = `Phonebook has info for ${phoneBook.length} people!<br/>${Date(Date.now).toString()}`;
+    // res.send(resText);
+    personDB.getPersonsCount(url).then(count => {
+      const resText = `Phonebook has info for ${count} people!<br/>${Date(Date.now).toString()}`
+      res.send(resText);
+    })
 });
 
 app.get("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const person = phoneBook.find(person => person.id === id);
-  if(person)
-    res.json(person)
-  else
-    res.status(404).end();
-})
+  const id = req.params.id;
+  // const person = phoneBook.find(person => person.id === id);
+  personDB.getPersonByID(url, id).then(person => {
+    if(person)
+      res.json(person)
+    else
+      res.status(404).end();
+  });
+});
 
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);

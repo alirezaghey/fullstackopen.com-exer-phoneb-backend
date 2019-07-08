@@ -16,12 +16,31 @@ const Person = mongoose.model('Person', personSchema);
 
 const getAllPersons = (url) => {
     mongoose.connect(url, {useNewUrlParser: true});
-    Person.find({}).then( res => {
+    return Person.find({}).then( res => {
         res.forEach(per => {
             console.log(per);
         })
         mongoose.connection.close();
+        return res;
     });
+}
+
+const getPersonByID = (url, id) => {
+    mongoose.connect(url, {useNewUrlParser: true});
+    return Person.findById(id).then(res => {
+        console.log(res);
+        mongoose.connection.close();
+        return res;
+    });
+}
+
+const getPersonsCount = (url) => {
+    mongoose.connect(url, {useNewUrlParser: true});
+    return Person.estimatedDocumentCount({}).then( res => {
+        console.log(res);
+        mongoose.connection.close();
+        return res;
+    })
 }
 
 const addPerson = (url, name, number) => {
@@ -41,7 +60,9 @@ const addPerson = (url, name, number) => {
 
 module.exports = {
     getAllPersons: getAllPersons,
-    addPerson: addPerson
+    addPerson: addPerson,
+    getPersonsCount: getPersonsCount,
+    getPersonByID: getPersonByID
 }
 
 
