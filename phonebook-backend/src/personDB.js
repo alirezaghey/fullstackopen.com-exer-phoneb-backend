@@ -49,10 +49,11 @@ const addPerson = (url, name, number) => {
         number: number
     });
     mongoose.connect(url, {useNewUrlParser: true});
-    person.save().then(res => {
+    return person.save().then(res => {
         console.log(res);
         console.log('Person saved!');
         mongoose.connection.close();
+        return res;
     });
 };
 

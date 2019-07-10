@@ -100,12 +100,13 @@ app.post("/api/persons", (req, res) => {
     return res.status(400).json({error: "name missing!"});
   if (person.number === "")
     return res.status(400).json({error: "number missing!"});
-  if (phoneBook.some(el => el.name.toLocaleLowerCase() === person.name.toLocaleLowerCase()))
-    return res.status(400).json({error: "name already exists!"});
+  // if (phoneBook.some(el => el.name.toLocaleLowerCase() === person.name.toLocaleLowerCase()))
+  //   return res.status(400).json({error: "name already exists!"});
   
-  person.id = Math.floor(Math.random() * 10000);
-  phoneBook = phoneBook.concat(person);
-  res.json(person);
+  // person.id = Math.floor(Math.random() * 10000);
+  // phoneBook = phoneBook.concat(person);
+  personDB.addPerson(url, person.name, person.number).then(person => res.json(person));
+  // res.json(person);
 })
 
 const PORT = process.env.PORT || 3001;
