@@ -12,6 +12,9 @@ app.use(bodyParser.json());
 morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status - :response-time ms :body'));
 
+app.use(cors());
+app.use(express.static('build'));
+
 const url = process.env.MONGODB_URI;
 
 app.get("/api/persons", (req, res) => {
