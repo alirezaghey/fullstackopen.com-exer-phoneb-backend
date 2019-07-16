@@ -109,5 +109,12 @@ app.post("/api/persons", (req, res) => {
   // res.json(person);
 })
 
+app.put("/api/persons/:id", (req, res) => {
+  personDB.updatePerson(url, req.body.id, req.body.number).then(person => res.json(person));
+  console.log(req.url);
+  console.log(req.body);
+  console.log(res);
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => `Server listening on port ${PORT}`);

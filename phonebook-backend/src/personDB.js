@@ -57,11 +57,21 @@ const addPerson = (url, name, number) => {
     });
 };
 
+const updatePerson = (url, id, number) => {
+    mongoose.connect(url, {useNewUrlParser: true, useFindAndModify: false});
+    return Person.findByIdAndUpdate(id, {number: number}, {new: true}).then(res => {
+        console.log(res);
+        mongoose.connection.close();
+        return res;
+    })
+}
+
 
 
 module.exports = {
     getAllPersons: getAllPersons,
     addPerson: addPerson,
+    updatePerson: updatePerson,
     getPersonsCount: getPersonsCount,
     getPersonByID: getPersonByID
 }
